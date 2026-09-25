@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAT Practice Test #4</title>
+<style>
+:root{
+  --navy:#0a2540; --navy-dark:#071b30; --accent:#0f6fb5; --accent2:#1a8f5c;
+  --ink:#1a1a2e; --sub:#5a6472; --line:#dfe3e8; --bg:#f4f6f8; --card:#ffffff;
+  --good:#1a8f5c; --bad:#c0392b; --warn:#b7791f; --math:#6a3fa0; --rw:#0f6fb5;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--ink);}
+header.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;padding:10px 20px;
+  display:flex;align-items:center;justify-content:space-between;font-family:Arial,Helvetica,sans-serif;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);}
+header.top .brand{font-weight:700;font-size:15px;letter-spacing:.5px;}
+header.top .modlabel{font-size:13px;opacity:.9;}
+header.top .timer{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
+  background:rgba(255,255,255,.12);padding:4px 14px;border-radius:6px;}
+header.top .timer.low{background:#c0392b;}
+.wrap{max-width:960px;margin:0 auto;padding:24px 16px 80px;}
+.welcome{max-width:680px;margin:60px auto;background:var(--card);border-radius:12px;padding:40px;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);text-align:center;}
+.welcome h1{font-family:Arial,sans-serif;color:var(--navy);margin-bottom:6px;}
+.welcome p{color:var(--sub);line-height:1.6;}
+.welcome input{font-size:16px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;width:70%;margin:16px 0;font-family:Arial,sans-serif;}
+.btn{font-family:Arial,Helvetica,sans-serif;font-weight:700;border:none;border-radius:6px;
+  padding:12px 26px;font-size:15px;cursor:pointer;transition:.15s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#0c5c96;}
+.btn-secondary{background:#fff;color:var(--navy);border:1.5px solid var(--navy);}
+.btn-secondary:hover{background:#eef2f6;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.mod-list{display:grid;gap:12px;margin:24px 0;text-align:left;}
+.modchip{border-radius:8px;padding:14px 18px;font-family:Arial,sans-serif;border-left:6px solid var(--accent);background:#f0f6fb;}
+.modchip.math{border-left-color:var(--math);background:#f5f0fa;}
+.modchip b{display:block;font-size:14px;}
+.modchip span{font-size:12.5px;color:var(--sub);}
+.intermission{max-width:600px;margin:80px auto;text-align:center;font-family:Arial,sans-serif;}
+.intermission h2{color:var(--navy);}
+.qwrap{display:flex;gap:0;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);min-height:420px;}
+.qwrap.single{display:block;}
+.passage-col,.q-col{padding:26px 28px;}
+.passage-col{border-right:1px solid var(--line);width:50%;}
+.q-col{width:50%;}
+.qwrap.single .q-col{width:100%;}
+.qnum-badge{display:inline-block;background:var(--navy);color:#fff;font-family:Arial,sans-serif;font-weight:700;
+  font-size:13px;border-radius:5px;padding:3px 10px;margin-bottom:14px;}
+.qnum-badge.math{background:var(--math);}
+.passage{line-height:1.65;font-size:16px;}
+.passage p{margin:0 0 12px;}
+.twotext{display:grid;gap:14px;}
+.textbox{border:1px solid var(--line);border-radius:6px;padding:10px 14px;background:#fafbfc;}
+.textbox .lbl{font-family:Arial,sans-serif;font-weight:700;font-size:12px;color:var(--sub);margin-bottom:4px;}
+.prompt{font-size:16.5px;line-height:1.5;margin-bottom:18px;font-weight:600;}
+.eq{font-family:'Cambria Math',Georgia,serif;font-size:17px;background:#f5f6f8;border-radius:6px;
+  padding:10px 14px;margin:10px 0;text-align:center;}
+table.datatable{border-collapse:collapse;margin:12px 0;font-size:14.5px;font-family:Arial,sans-serif;}
+table.datatable th,table.datatable td{border:1px solid #b7c0ca;padding:5px 10px;text-align:center;}
+table.datatable th{background:#eef2f6;}
+.chartbox{margin:14px 0;text-align:center;}
+.chartbox svg{max-width:100%;height:auto;}
+.chartcaption{font-size:12px;color:var(--sub);font-style:italic;margin-top:4px;font-family:Arial,sans-serif;}
+.options{display:grid;gap:10px;margin-top:8px;}
+.opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:8px;
+  padding:10px 14px;cursor:pointer;font-family:Arial,sans-serif;font-size:15px;transition:.12s;background:#fff;}
+.opt:hover{border-color:var(--accent);background:#f3f8fc;}
+.opt.selected{border-color:var(--accent);background:#e7f2fa;}
+.optlet{width:26px;height:26px;border-radius:50%;border:1.5px solid #9aa5b1;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+.opt.selected .optlet{background:var(--accent);border-color:var(--accent);color:#fff;}
+.gridin input{font-size:18px;padding:10px 14px;border:1.5px solid var(--line);border-radius:6px;width:220px;
+  font-family:Arial,sans-serif;margin-top:6px;}
+.gridin .hint{font-size:12.5px;color:var(--sub);margin-top:6px;font-family:Arial,sans-serif;}
+.navrow{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;border-top:1px solid var(--line);
+  background:#fafbfc;font-family:Arial,sans-serif;}
+.navrow .left, .navrow .right{display:flex;gap:10px;align-items:center;}
+.flagbtn{background:none;border:1.5px solid var(--line);border-radius:6px;padding:7px 14px;cursor:pointer;font-size:13px;font-family:Arial,sans-serif;}
+.flagbtn.flagged{background:#fff3cd;border-color:var(--warn);color:#7a5a00;font-weight:700;}
+.progressbar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:0 0 18px;}
+.progressbar > div{height:100%;background:var(--accent);}
+.qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-family:Arial,sans-serif;font-size:13px;color:var(--sub);}
+.reviewgrid{display:grid;grid-template-columns:repeat(11,1fr);gap:8px;margin:20px 0;}
+.reviewgrid button{aspect-ratio:1;border-radius:6px;border:1.5px solid var(--line);background:#fff;cursor:pointer;
+  font-family:Arial,sans-serif;font-weight:700;font-size:13px;}
+.reviewgrid button.answered{background:#e7f2fa;border-color:var(--accent);}
+.reviewgrid button.flagged{outline:2px solid var(--warn);outline-offset:-2px;}
+.reviewgrid button.current{background:var(--navy);color:#fff;}
+.results{max-width:900px;margin:0 auto;}
+.results h1{font-family:Arial,sans-serif;color:var(--navy);}
+.scorecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:22px 0;}
+.scorecard{background:var(--card);border-radius:10px;padding:18px;text-align:center;font-family:Arial,sans-serif;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);border-top:5px solid var(--accent);}
+.scorecard.math{border-top-color:var(--math);}
+.scorecard.total{border-top-color:var(--navy);}
+.scorecard .big{font-size:34px;font-weight:800;color:var(--navy);}
+.scorecard .lbl{font-size:13px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;}
+.filterbar{display:flex;gap:10px;margin:20px 0;font-family:Arial,sans-serif;}
+.filterbar button{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:7px 16px;
+  font-size:13.5px;cursor:pointer;}
+.filterbar button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.reviewq{background:var(--card);border-radius:10px;margin-bottom:18px;padding:22px 26px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.rhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:Arial,sans-serif;}
+.rhead .tag{font-weight:700;font-size:13px;color:var(--sub);}
+.status{font-family:Arial,sans-serif;font-weight:700;font-size:12.5px;padding:4px 12px;border-radius:20px;}
+.status.correct{background:#e3f6ec;color:var(--good);}
+.status.incorrect{background:#fdecea;color:var(--bad);}
+.status.skipped{background:#f0f1f3;color:var(--sub);}
+.reviewopts{display:grid;gap:8px;margin:10px 0;}
+.reviewopt{border:1.5px solid var(--line);border-radius:8px;padding:9px 13px;font-family:Arial,sans-serif;font-size:14.5px;display:flex;gap:10px;}
+.reviewopt.correctopt{border-color:var(--good);background:#f0faf4;}
+.reviewopt.wrongpick{border-color:var(--bad);background:#fdf2f1;}
+.gridinanswer{font-family:Arial,sans-serif;font-size:14.5px;margin:8px 0;}
+.gridinanswer b{color:var(--navy);}
+.explain-container{margin-top:14px;border:1.5px dashed var(--accent);border-radius:8px;padding:14px 18px;background:#f7fbfd;}
+.explain-container.math{border-color:var(--math);background:#faf7fc;}
+.exlabel{display:inline-block;font-family:Arial,sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.explain-container.math .exlabel{color:var(--math);}
+.explain-container p{margin:0 0 10px;line-height:1.55;font-size:14.5px;}
+.explain-container p:last-child{margin-bottom:0;}
+@media (max-width:760px){
+  .qwrap{flex-direction:column;}
+  .passage-col{width:100%;border-right:none;border-bottom:1px solid var(--line);}
+  .q-col{width:100%;}
+  .reviewgrid{grid-template-columns:repeat(6,1fr);}
+}
+.loaderbar{background:#e9edf1;border-bottom:1px solid var(--line);padding:10px 16px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-family:Arial,sans-serif;font-size:13.5px;}
+.loaderbar .lbl{color:var(--sub);font-weight:700;}
+.loaderbar select{font-family:Arial,sans-serif;font-size:13px;padding:6px 10px;border:1px solid var(--line);
+  border-radius:6px;background:#fff;max-width:260px;}
+.loaderbar .file-btn{background:#fff;border:1px solid var(--line);border-radius:6px;padding:6px 12px;
+  cursor:pointer;font-weight:700;color:var(--navy);}
+.loaderbar .file-btn:hover{border-color:var(--accent);}
+.loaderbar input[type=file]{display:none;}
+.loaderbar .load-msg{font-size:12.5px;}
+.loaderbar .load-msg.ok{color:var(--good);}
+.loaderbar .load-msg.err{color:var(--bad);}
+.loaderbar .current-test{margin-left:auto;color:var(--sub);font-style:italic;}
+.nodata{max-width:600px;margin:80px auto;text-align:center;font-family:Arial,sans-serif;color:var(--sub);}
+.nodata h2{color:var(--navy);font-family:Arial,sans-serif;}
+.results-actions{display:flex;gap:12px;margin:18px 0 6px;}
+.save-btn{font-family:Arial,sans-serif;font-weight:700;border:1.5px solid var(--navy);background:#fff;
+  color:var(--navy);border-radius:6px;padding:10px 20px;cursor:pointer;font-size:14px;}
+.save-btn:hover{background:#eef2f6;}
+.save-msg{font-family:Arial,sans-serif;font-size:13px;color:var(--good);margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="loaderbar">
+  <span class="lbl">Test:</span>
+  <select id="presetSelect"><option value="">Choose a hosted test&hellip;</option></select>
+  <span class="lbl">or</span>
+  <label class="file-btn" for="fileInput">Load .json file</label>
+  <input type="file" id="fileInput" accept="application/json,.json">
+  <span class="load-msg" id="loadMsg"></span>
+  <span class="current-test" id="currentTestLabel"></span>
+</div>
+<div id="app"></div>
+<script>
+let SAT = null;
+
+let state = {
+  screen: 'welcome',
+  studentName: '',
+  moduleIndex: 0,
+  qIndex: 0,
+  answers: {},
+  flags: {},
+  reviewFilter: 'all',
+  timerSeconds: 0,
+  timerHandle: null
+};
+
+const app = document.getElementById('app');
+
+function esc(s){ return String(s); }
+
+/* ---------------- Chart builders ---------------- */
+const SVGNS = "http://www.w3.org/2000/svg";
+function svgEl(tag, attrs, children){
+  const el = document.createElementNS(SVGNS, tag);
+  for (const k in (attrs||{})) el.setAttribute(k, attrs[k]);
+  (children||[]).forEach(c=>el.appendChild(c));
+  return el;
+}
+function svgToString(svg){
+  const s = new XMLSerializer().serializeToString(svg);
+  return s;
+}
+
+function buildBarSVG(cfg){
+  const W=560,H=320,padL=64,padR=20,padT=cfg.title?46:20,padB=70;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const series = cfg.series;
+  const nCat = cfg.categories.length;
+  const yMax = cfg.yMax;
+  const groupW = plotW/nCat;
+  const barGroupPad = groupW*0.18;
+  const nSeries = series.length;
+  const barW = (groupW - 2*barGroupPad)/nSeries;
+  const colors = ['#8a8f98','#c9cdd3','#3a3f47','#0f6fb5','#1a8f5c'];
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`,xmlns:SVGNS});
+  if(cfg.title){
+    svg.appendChild(svgEl('text',{x:W/2,y:22,'text-anchor':'middle','font-family':'Georgia,serif','font-size':13,'font-weight':'bold',fill:'#1a1a2e'})).textContent=cfg.title;
+  }
+  // axes
+  svg.appendChild(svgEl('line',{x1:padL,y1:padT,x2:padL,y2:padT+plotH,stroke:'#333'}));
+  svg.appendChild(svgEl('line',{x1:padL,y1:padT+plotH,x2:padL+plotW,y2:padT+plotH,stroke:'#333'}));
+  // y gridlines / labels
+  const step = cfg.yStep || Math.ceil(yMax/6);
+  for(let v=0; v<=yMax; v+=step){
+    const y = padT+plotH-(v/yMax)*plotH;
+    svg.appendChild(svgEl('line',{x1:padL,y1:y,x2:padL+plotW,y2:y,stroke:'#e3e6ea'}));
+    const t=svgEl('text',{x:padL-8,y:y+4,'text-anchor':'end','font-family':'Arial','font-size':10.5,fill:'#444'});
+    t.textContent = v.toLocaleString(); svg.appendChild(t);
+  }
+  if(cfg.yLabel){
+    const t=svgEl('text',{x:16,y:padT+plotH/2,'text-anchor':'middle','font-family':'Arial','font-size':11,fill:'#444',transform:`rotate(-90 16 ${padT+plotH/2})`});
+    t.textContent = cfg.yLabel; svg.appendChild(t);
+  }
+  cfg.categories.forEach((cat,i)=>{
+    const gx = padL + i*groupW;
+    series.forEach((s,si)=>{
+      const val = s.values[i];
+      const bh = (val/yMax)*plotH;
+      const bx = gx + barGroupPad + si*barW;
+      const by = padT+plotH-bh;
+      svg.appendChild(svgEl('rect',{x:bx,y:by,width:barW*0.86,height:bh,fill:colors[si%colors.length],stroke:'#333','stroke-width':0.6}));
+    });
+    const t=svgEl('text',{x:gx+groupW/2,y:padT+plotH+16,'text-anchor':'middle','font-family':'Arial','font-size':10.5,fill:'#333'});
+    t.textContent = cat; svg.appendChild(t);
+  });
+  if(cfg.xLabel){
+    const t=svgEl('text',{x:padL+plotW/2,y:H-8,'text-anchor':'middle','font-family':'Arial','font-size':11,fill:'#444'});
+    t.textContent = cfg.xLabel; svg.appendChild(t);
+  }
+  if(series.length>1){
+    let lx = padL, ly = H-40;
+    // legend below in flow via HTML instead - kept simple: draw small legend row
+    const legendY = padT+plotH+34;
+    let cx = padL;
+    series.forEach((s,si)=>{
+      svg.appendChild(svgEl('rect',{x:cx,y:legendY,width:10,height:10,fill:colors[si%colors.length],stroke:'#333','stroke-width':0.5}));
+      const t=svgEl('text',{x:cx+14,y:legendY+9,'font-family':'Arial','font-size':10,fill:'#333'});
+      t.textContent = s.name; svg.appendChild(t);
+      cx += 14 + s.name.length*6.2 + 18;
+    });
+  }
+  return svg;
+}
+
+function buildLineSVG(cfg){
+  const W=560,H=320,padL=64,padR=24,padT=cfg.title?46:20,padB=64;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`,xmlns:SVGNS});
+  if(cfg.title){
+    svg.appendChild(svgEl('text',{x:W/2,y:22,'text-anchor':'middle','font-family':'Georgia,serif','font-size':13,'font-weight':'bold'})).textContent=cfg.title;
+  }
+  if(cfg.categories){
+    const n=cfg.categories.length;
+    const yMax=cfg.yMax, step=cfg.yStep||Math.ceil(yMax/5);
+    svg.appendChild(svgEl('line',{x1:padL,y1:padT,x2:padL,y2:padT+plotH,stroke:'#333'}));
+    svg.appendChild(svgEl('line',{x1:padL,y1:padT+plotH,x2:padL+plotW,y2:padT+plotH,stroke:'#333'}));
+    for(let v=0;v<=yMax;v+=step){
+      const y=padT+plotH-(v/yMax)*plotH;
+      svg.appendChild(svgEl('line',{x1:padL,y1:y,x2:padL+plotW,y2:y,stroke:'#e3e6ea'}));
+      const t=svgEl('text',{x:padL-8,y:y+4,'text-anchor':'end','font-family':'Arial','font-size':10.5,fill:'#444'});
+      t.textContent=v; svg.appendChild(t);
+    }
+    if(cfg.yLabel){
+      const t=svgEl('text',{x:16,y:padT+plotH/2,'text-anchor':'middle','font-family':'Arial','font-size':11,fill:'#444',transform:`rotate(-90 16 ${padT+plotH/2})`});
+      t.textContent=cfg.yLabel; svg.appendChild(t);
+    }
+    const pts = cfg.series[0].values.map((v,i)=>{
+      const x = padL + (n===1?0:(i/(n-1))*plotW);
+      const y = padT+plotH-(v/yMax)*plotH;
+      return [x,y];
+    });
+    const path = pts.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    svg.appendChild(svgEl('path',{d:path,fill:'none',stroke:'#0f6fb5','stroke-width':2}));
+    pts.forEach(p=>svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:3,fill:'#0f6fb5'})));
+    cfg.categories.forEach((c,i)=>{
+      const x = padL + (n===1?0:(i/(n-1))*plotW);
+      const t=svgEl('text',{x:x,y:padT+plotH+16,'text-anchor':'middle','font-family':'Arial','font-size':9.5,fill:'#333',transform:`rotate(-40 ${x} ${padT+plotH+16})`});
+      t.textContent=c; svg.appendChild(t);
+    });
+    if(cfg.xLabel){
+      const t=svgEl('text',{x:padL+plotW/2,y:H-6,'text-anchor':'middle','font-family':'Arial','font-size':11,fill:'#444'});
+      t.textContent=cfg.xLabel; svg.appendChild(t);
+    }
+  } else if(cfg.lineSeg || cfg.lines){
+    // coordinate-plane line graph, styled like the printed SAT grid
+    const xMin=cfg.xMin,xMax=cfg.xMax,yMin=cfg.yMin,yMax=cfg.yMax;
+    const xStep = cfg.xStep || 2, yStep = cfg.yStep || 2;
+    const sx = v => padL + ((v-xMin)/(xMax-xMin))*plotW;
+    const sy = v => padT+plotH - ((v-yMin)/(yMax-yMin))*plotH;
+    // light grid
+    for(let v=xMin; v<=xMax; v+=xStep){
+      const x=sx(v);
+      svg.appendChild(svgEl('line',{x1:x,y1:padT,x2:x,y2:padT+plotH,stroke:'#dde1e6','stroke-width':0.7}));
+    }
+    for(let v=yMin; v<=yMax; v+=yStep){
+      const y=sy(v);
+      svg.appendChild(svgEl('line',{x1:padL,y1:y,x2:padL+plotW,y2:y,stroke:'#dde1e6','stroke-width':0.7}));
+    }
+    const x0=sx(0), y0=sy(0);
+    // axes with arrowheads
+    svg.appendChild(svgEl('line',{x1:padL,y1:y0,x2:padL+plotW-2,y2:y0,stroke:'#222','stroke-width':1.3}));
+    svg.appendChild(svgEl('polygon',{points:`${padL+plotW},${y0} ${padL+plotW-9},${y0-4} ${padL+plotW-9},${y0+4}`,fill:'#222'}));
+    svg.appendChild(svgEl('line',{x1:x0,y1:padT+plotH,x2:x0,y2:padT+2,stroke:'#222','stroke-width':1.3}));
+    svg.appendChild(svgEl('polygon',{points:`${x0},${padT} ${x0-4},${padT+9} ${x0+4},${padT+9}`,fill:'#222'}));
+    // tick labels
+    for(let v=xMin; v<=xMax; v+=xStep){
+      if(v===0) continue;
+      const x=sx(v);
+      const t=svgEl('text',{x:x,y:y0+16,'text-anchor':'middle','font-family':'Georgia,serif','font-size':11,fill:'#222'});
+      t.textContent=v; svg.appendChild(t);
+    }
+    for(let v=yMin; v<=yMax; v+=yStep){
+      if(v===0) continue;
+      const y=sy(v);
+      const t=svgEl('text',{x:x0-8,y:y+4,'text-anchor':'end','font-family':'Georgia,serif','font-size':11,fill:'#222'});
+      t.textContent=v; svg.appendChild(t);
+    }
+    const o=svgEl('text',{x:x0-9,y:y0+15,'text-anchor':'end','font-family':'Georgia,serif','font-style':'italic','font-size':11,fill:'#222'});
+    o.textContent='O'; svg.appendChild(o);
+    // the line(s), drawn on top of the grid
+    const allLines = cfg.lines || [cfg.lineSeg];
+    allLines.forEach(seg=>{
+      const p1=seg[0], p2=seg[1];
+      svg.appendChild(svgEl('line',{x1:sx(p1[0]),y1:sy(p1[1]),x2:sx(p2[0]),y2:sy(p2[1]),stroke:'#1a1a2e','stroke-width':2.2}));
+    });
+    if(cfg.dots){
+      cfg.dots.forEach(d=>{
+        svg.appendChild(svgEl('circle',{cx:sx(d[0]),cy:sy(d[1]),r:4.5,fill:'#1a1a2e'}));
+      });
+    }
+    const txX=svgEl('text',{x:padL+plotW+2,y:y0-8,'text-anchor':'end','font-family':'Georgia,serif','font-style':'italic','font-size':14});
+    txX.textContent='x'; svg.appendChild(txX);
+    const txY=svgEl('text',{x:x0+8,y:padT+8,'font-family':'Georgia,serif','font-style':'italic','font-size':14});
+    txY.textContent='y'; svg.appendChild(txY);
+  }
+  return svg;
+}
+
+function buildScatterSVG(cfg){
+  const W=520,H=320,padL=54,padR=20,padT=20,padB=56;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const xMax=cfg.xMax, yMax=cfg.yMax;
+  const sx = v => padL + (v/xMax)*plotW;
+  const sy = v => padT+plotH - (v/yMax)*plotH;
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`,xmlns:SVGNS});
+  svg.appendChild(svgEl('line',{x1:padL,y1:padT,x2:padL,y2:padT+plotH,stroke:'#333'}));
+  svg.appendChild(svgEl('line',{x1:padL,y1:padT+plotH,x2:padL+plotW,y2:padT+plotH,stroke:'#333'}));
+  for(let v=0;v<=xMax;v++){
+    const x=sx(v);
+    svg.appendChild(svgEl('line',{x1:x,y1:padT,x2:x,y2:padT+plotH,stroke:'#f0f1f3'}));
+    const t=svgEl('text',{x:x,y:padT+plotH+16,'text-anchor':'middle','font-family':'Arial','font-size':10,fill:'#333'});
+    t.textContent=v; svg.appendChild(t);
+  }
+  for(let v=0;v<=yMax;v++){
+    const y=sy(v);
+    svg.appendChild(svgEl('line',{x1:padL,y1:y,x2:padL+plotW,y2:y,stroke:'#f0f1f3'}));
+    const t=svgEl('text',{x:padL-8,y:y+4,'text-anchor':'end','font-family':'Arial','font-size':10,fill:'#333'});
+    t.textContent=v; svg.appendChild(t);
+  }
+  cfg.points.forEach(p=>{
+    svg.appendChild(svgEl('circle',{cx:sx(p[0]),cy:sy(p[1]),r:3.6,fill:'#1a1a2e'}));
+  });
+  if(cfg.line){
+    const x1=0,x2=xMax;
+    const y1=cfg.line.intercept+cfg.line.slope*x1;
+    const y2=cfg.line.intercept+cfg.line.slope*x2;
+    svg.appendChild(svgEl('line',{x1:sx(x1),y1:sy(Math.max(0,Math.min(yMax,y1))),x2:sx(x2),y2:sy(Math.max(0,Math.min(yMax,y2))),stroke:'#c0392b','stroke-width':1.6,'stroke-dasharray':'5,3'}));
+  }
+  const txX=svgEl('text',{x:padL+plotW,y:padT+plotH+34,'text-anchor':'end','font-family':'Georgia,serif','font-style':'italic','font-size':13});
+  txX.textContent = cfg.xLabel||'x'; svg.appendChild(txX);
+  const txY=svgEl('text',{x:padL+4,y:padT+2,'font-family':'Georgia,serif','font-style':'italic','font-size':13});
+  txY.textContent = cfg.yLabel||'y'; svg.appendChild(txY);
+  return svg;
+}
+
+function buildDotplotSVG(cfg){
+  const W=460,H=170,padL=40,padR=40,padB=40,padT= cfg.title?36:16;
+  const plotW=W-padL-padR;
+  const n=cfg.categories.length;
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`,xmlns:SVGNS});
+  if(cfg.title){
+    svg.appendChild(svgEl('text',{x:W/2,y:20,'text-anchor':'middle','font-family':'Georgia,serif','font-size':13,'font-weight':'bold'})).textContent=cfg.title;
+  }
+  const y0 = H-padB;
+  svg.appendChild(svgEl('line',{x1:padL,y1:y0,x2:padL+plotW,y2:y0,stroke:'#333'}));
+  const spacing = plotW/(n-1||1);
+  const r=6.5;
+  cfg.categories.forEach((c,i)=>{
+    const x = padL + i*spacing;
+    const cnt = cfg.counts[i];
+    for(let k=0;k<cnt;k++){
+      const cy = y0 - r - k*(r*2+2);
+      svg.appendChild(svgEl('circle',{cx:x,cy:cy,r:r,fill:'#1a1a2e'}));
+    }
+    const t=svgEl('text',{x:x,y:y0+16,'text-anchor':'middle','font-family':'Arial','font-size':11,fill:'#333'});
+    t.textContent=c; svg.appendChild(t);
+  });
+  return svg;
+}
+
+function chartToHTML(chart){
+  if(!chart) return '';
+  let inner = '';
+  if(chart.type==='raw'){
+    inner = chart.svg;
+  } else if(chart.type==='bar'){
+    inner = svgToString(buildBarSVG(chart));
+  } else if(chart.type==='line'){
+    inner = svgToString(buildLineSVG(chart));
+  } else if(chart.type==='scatter'){
+    inner = svgToString(buildScatterSVG(chart));
+  } else if(chart.type==='dotplot'){
+    inner = svgToString(buildDotplotSVG(chart));
+  }
+  const cap = chart.caption ? `<div class="chartcaption">${chart.caption}</div>` : '';
+  return `<div class="chartbox">${inner}${cap}</div>`;
+}
+
+/* ---------------- Grid-in matching ---------------- */
+function evalFraction(s){
+  s = s.trim();
+  if(s.includes('/')){
+    const [a,b] = s.split('/').map(Number);
+    if(!isNaN(a) && !isNaN(b) && b!==0) return a/b;
+    return NaN;
+  }
+  const v = parseFloat(s);
+  return v;
+}
+function normalizeGridin(v){
+  return (v||'').toString().trim().replace(/\s+/g,'');
+}
+function gridinCorrect(q, given){
+  const g = normalizeGridin(given);
+  if(g==='') return false;
+  const accepts = q.accept && q.accept.length ? q.accept : [q.answer];
+  for(const a of accepts){
+    if(normalizeGridin(a).toLowerCase() === g.toLowerCase()) return true;
+    const av = evalFraction(a), gv = evalFraction(g);
+    if(!isNaN(av) && !isNaN(gv) && Math.abs(av-gv) < 1e-6) return true;
+  }
+  return false;
+}
+function isCorrect(mIdx, q){
+  const key = ansKey(mIdx, q.id);
+  const given = state.answers[key];
+  if(given===undefined || given===null || given==='') return false;
+  if(q.type==='mcq') return given === q.answer;
+  return gridinCorrect(q, given);
+}
+function ansKey(mIdx, qId){ return SAT.modules[mIdx].id + '_' + qId; }
+
+/* ---------------- Rendering ---------------- */
+function render(){
+  if(state.screen!=='test' && state.timerHandle){ clearInterval(state.timerHandle); state.timerHandle=null; }
+  if(!SAT) return renderNoData();
+  if(state.screen==='welcome') return renderWelcome();
+  if(state.screen==='intermission') return renderIntermission();
+  if(state.screen==='test') return renderTest();
+  if(state.screen==='results') return renderResults();
+}
+
+function renderNoData(){
+  app.innerHTML = `
+  <div class="nodata">
+    <h2>No test loaded</h2>
+    <p>Choose a hosted test from the dropdown above, or click <b>Load .json file</b> to upload a test file from your computer.</p>
+  </div>`;
+}
+
+function renderWelcome(){
+  let modsHtml = SAT.modules.map(m=>`
+    <div class="modchip ${m.subject==='math'?'math':''}">
+      <b>${m.label}</b>
+      <span>${m.questions.length} questions &middot; ${m.timeMinutes} minutes</span>
+    </div>`).join('');
+  app.innerHTML = `
+  <div class="welcome">
+    <h1 style="font-family:Arial,sans-serif;">${SAT.title}</h1>
+    <p>${SAT.description || 'A full-length, multi-module practice test including charts, tables, and figures exactly as they appear on the real exam. Explanations for every question are shown in the results review at the end of each attempt.'}</p>
+    <div class="mod-list">${modsHtml}</div>
+    <input id="nameInput" type="text" placeholder="Your name (optional)" value="${state.studentName}">
+    <br>
+    <button class="btn btn-primary" onclick="startTest()">Begin Test</button>
+  </div>`;
+}
+
+function startTest(){
+  state.studentName = document.getElementById('nameInput').value || 'Student';
+  state.moduleIndex = 0;
+  state.qIndex = 0;
+  state.screen = 'intermission';
+  render();
+}
+
+function renderIntermission(){
+  const m = SAT.modules[state.moduleIndex];
+  const isFirst = state.moduleIndex===0;
+  const isBreak = state.moduleIndex===2;
+  app.innerHTML = `
+  <div class="intermission">
+    <h2>${isFirst? 'Ready to begin?' : (isBreak? '10-Minute Break Complete' : 'Module Complete')}</h2>
+    <p style="font-family:Arial,sans-serif;color:var(--sub);">Next: <b>${m.label}</b><br>${m.questions.length} questions &middot; ${m.timeMinutes} minutes</p>
+    <p style="font-family:Arial,sans-serif;color:var(--sub);font-size:14px;">${m.directions}</p>
+    <button class="btn btn-primary" onclick="beginModule()">Start Module</button>
+  </div>`;
+}
+
+function beginModule(){
+  state.qIndex = 0;
+  state.screen = 'test';
+  state.timerSeconds = SAT.modules[state.moduleIndex].timeMinutes*60;
+  render();
+  startTimerTick();
+}
+
+function startTimerTick(){
+  if(state.timerHandle){ clearInterval(state.timerHandle); state.timerHandle=null; }
+  updateTimerDisplay();
+  state.timerHandle = setInterval(()=>{
+    state.timerSeconds--;
+    if(state.timerSeconds<=0){
+      clearInterval(state.timerHandle); state.timerHandle=null;
+      finishModule();
+      return;
+    }
+    updateTimerDisplay();
+  },1000);
+}
+function updateTimerDisplay(){
+  const el = document.getElementById('timerDisplay');
+  if(!el) return;
+  const m = Math.floor(state.timerSeconds/60), s = state.timerSeconds%60;
+  el.textContent = m+':'+String(s).padStart(2,'0');
+  el.classList.toggle('low', state.timerSeconds < 300);
+}
+
+function renderTest(){
+  const mod = SAT.modules[state.moduleIndex];
+  const q = mod.questions[state.qIndex];
+  const key = ansKey(state.moduleIndex, q.id);
+  const given = state.answers[key];
+  const flagged = !!state.flags[key];
+  const isMath = mod.subject==='math';
+
+  let leftCol = '';
+  if(q.passage || q.texts || q.chart){
+    let inner = '';
+    if(q.texts){
+      inner += `<div class="twotext">` + q.texts.map(t=>`<div class="textbox"><div class="lbl">${t.label}</div>${t.html}</div>`).join('') + `</div>`;
+    }
+    if(q.passage) inner += `<div class="passage">${q.passage}</div>`;
+    if(q.chart) inner += chartToHTML(q.chart);
+    leftCol = `<div class="passage-col">${inner}</div>`;
+  }
+
+  let answerArea = '';
+  if(q.type==='mcq'){
+    answerArea = `<div class="options">` + q.options.map((opt,i)=>{
+      const sel = given===i;
+      return `<div class="opt ${sel?'selected':''}" onclick="selectMCQ(${i})">
+        <div class="optlet">${String.fromCharCode(65+i)}</div>
+        <div>${opt}</div>
+      </div>`;
+    }).join('') + `</div>`;
+  } else {
+    answerArea = `<div class="gridin">
+      <input type="text" id="gridinInput" value="${given!==undefined?given:''}" placeholder="Enter your answer" oninput="typeGridin(this.value)">
+      <div class="hint">Answer can be an integer, decimal, or fraction (e.g. 3/10 or .3).</div>
+    </div>`;
+  }
+
+  const rightInner = `
+    <div class="qmeta"><span>Question ${state.qIndex+1} of ${mod.questions.length}</span><span>${mod.label}</span></div>
+    <div class="progressbar"><div style="width:${((state.qIndex+1)/mod.questions.length*100).toFixed(1)}%"></div></div>
+    <span class="qnum-badge ${isMath?'math':''}">${state.qIndex+1}</span>
+    <div class="prompt">${q.prompt}</div>
+    ${answerArea}
+  `;
+
+  app.innerHTML = `
+  <header class="top">
+    <div class="brand">${(SAT.title||'PRACTICE TEST').toUpperCase()}</div>
+    <div class="modlabel">${mod.label}</div>
+    <div class="timer" id="timerDisplay">--:--</div>
+  </header>
+  <div class="wrap">
+    <div class="qwrap ${leftCol?'':'single'}">
+      ${leftCol}
+      <div class="q-col">${rightInner}</div>
+    </div>
+    <div class="navrow">
+      <div class="left">
+        <button class="btn btn-secondary" onclick="prevQ()" ${state.qIndex===0?'disabled':''}>Back</button>
+        <button class="flagbtn ${flagged?'flagged':''}" onclick="toggleFlag()">${flagged?'⚑ Flagged':'⚐ Mark for Review'}</button>
+      </div>
+      <div class="right">
+        <button class="btn btn-secondary" onclick="showReviewGrid()">Question ${state.qIndex+1} of ${mod.questions.length} &#9662;</button>
+        ${state.qIndex===mod.questions.length-1
+          ? `<button class="btn btn-primary" onclick="finishModule()">Next Module &rarr;</button>`
+          : `<button class="btn btn-primary" onclick="nextQ()">Next</button>`}
+      </div>
+    </div>
+    <div id="reviewGridPanel"></div>
+  </div>`;
+  updateTimerDisplay();
+}
+
+function selectMCQ(i){
+  const mod = SAT.modules[state.moduleIndex];
+  const q = mod.questions[state.qIndex];
+  state.answers[ansKey(state.moduleIndex,q.id)] = i;
+  renderTest();
+}
+function typeGridin(val){
+  const mod = SAT.modules[state.moduleIndex];
+  const q = mod.questions[state.qIndex];
+  state.answers[ansKey(state.moduleIndex,q.id)] = val;
+}
+function toggleFlag(){
+  const mod = SAT.modules[state.moduleIndex];
+  const q = mod.questions[state.qIndex];
+  const key = ansKey(state.moduleIndex,q.id);
+  state.flags[key] = !state.flags[key];
+  renderTest();
+}
+function prevQ(){ if(state.qIndex>0){ state.qIndex--; render(); } }
+function nextQ(){
+  const mod = SAT.modules[state.moduleIndex];
+  if(state.qIndex < mod.questions.length-1){ state.qIndex++; render(); }
+}
+function jumpTo(i){ state.qIndex=i; document.getElementById('reviewGridPanel').innerHTML=''; render(); }
+function showReviewGrid(){
+  const mod = SAT.modules[state.moduleIndex];
+  const panel = document.getElementById('reviewGridPanel');
+  if(panel.innerHTML){ panel.innerHTML=''; return; }
+  let cells = mod.questions.map((q,i)=>{
+    const key = ansKey(state.moduleIndex,q.id);
+    const answered = state.answers[key]!==undefined && state.answers[key]!=='';
+    const flagged = !!state.flags[key];
+    const current = i===state.qIndex;
+    return `<button class="${answered?'answered':''} ${flagged?'flagged':''} ${current?'current':''}" onclick="jumpTo(${i})">${i+1}</button>`;
+  }).join('');
+  panel.innerHTML = `<div style="background:var(--card);border-radius:10px;padding:18px 22px;margin-top:14px;font-family:Arial,sans-serif;">
+    <b>Jump to a question</b>
+    <div class="reviewgrid">${cells}</div>
+  </div>`;
+}
+
+function finishModule(){
+  if(state.timerHandle){ clearInterval(state.timerHandle); state.timerHandle=null; }
+  if(state.moduleIndex < SAT.modules.length-1){
+    state.moduleIndex++;
+    state.screen = 'intermission';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+/* ---------------- Results ---------------- */
+function renderResults(){
+  let rwCorrect=0, rwTotal=0, mathCorrect=0, mathTotal=0;
+  SAT.modules.forEach((mod,mIdx)=>{
+    mod.questions.forEach(q=>{
+      const ok = isCorrect(mIdx,q);
+      if(mod.subject==='rw'){ rwTotal++; if(ok) rwCorrect++; }
+      else { mathTotal++; if(ok) mathCorrect++; }
+    });
+  });
+  const totalCorrect = rwCorrect+mathCorrect, totalQ = rwTotal+mathTotal;
+
+  app.innerHTML = `
+  <header class="top"><div class="brand">${(SAT.title||'PRACTICE TEST').toUpperCase()}</div><div class="modlabel">Results</div><div></div></header>
+  <div class="wrap results">
+    <h1>Your Results</h1>
+    <p style="font-family:Arial,sans-serif;color:var(--sub);">${state.studentName}, here's how you did across all ${SAT.modules.length} modules.</p>
+    <div class="scorecards">
+      <div class="scorecard"><div class="big">${rwCorrect}/${rwTotal}</div><div class="lbl">Reading &amp; Writing</div></div>
+      <div class="scorecard math"><div class="big">${mathCorrect}/${mathTotal}</div><div class="lbl">Math</div></div>
+      <div class="scorecard total"><div class="big">${totalCorrect}/${totalQ}</div><div class="lbl">Overall</div></div>
+    </div>
+    <div class="results-actions">
+      <button class="save-btn" onclick="saveResult()">Save result</button>
+    </div>
+    <div class="save-msg" id="saveMsg"></div>
+    <div class="filterbar" id="filterbar">
+      <button class="${state.reviewFilter==='all'?'active':''}" onclick="setFilter('all')">All Questions</button>
+      <button class="${state.reviewFilter==='incorrect'?'active':''}" onclick="setFilter('incorrect')">Incorrect Only</button>
+      <button class="${state.reviewFilter==='flagged'?'active':''}" onclick="setFilter('flagged')">Flagged Only</button>
+    </div>
+    <div id="reviewList">${buildReviewList()}</div>
+  </div>`;
+}
+
+function setFilter(f){ state.reviewFilter=f; renderResults(); }
+
+function buildReviewList(){
+  let html = '';
+  SAT.modules.forEach((mod,mIdx)=>{
+    const isMath = mod.subject==='math';
+    mod.questions.forEach(q=>{
+      const key = ansKey(mIdx,q.id);
+      const given = state.answers[key];
+      const flagged = !!state.flags[key];
+      const answered = given!==undefined && given!=='';
+      const correct = answered && isCorrect(mIdx,q);
+
+      if(state.reviewFilter==='incorrect' && correct) return;
+      if(state.reviewFilter==='incorrect' && !answered) { /* keep unanswered as incorrect-ish */ }
+      if(state.reviewFilter==='flagged' && !flagged) return;
+
+      let statusHtml, statusClass;
+      if(!answered){ statusHtml='Skipped'; statusClass='skipped'; }
+      else if(correct){ statusHtml='Correct'; statusClass='correct'; }
+      else { statusHtml='Incorrect'; statusClass='incorrect'; }
+
+      let leftHtml = '';
+      if(q.texts) leftHtml += `<div class="twotext">` + q.texts.map(t=>`<div class="textbox"><div class="lbl">${t.label}</div>${t.html}</div>`).join('') + `</div>`;
+      if(q.passage) leftHtml += `<div class="passage">${q.passage}</div>`;
+      if(q.chart) leftHtml += chartToHTML(q.chart);
+
+      let answerHtml = '';
+      if(q.type==='mcq'){
+        answerHtml = `<div class="reviewopts">` + q.options.map((opt,i)=>{
+          let cls='';
+          if(i===q.answer) cls='correctopt';
+          else if(i===given && given!==q.answer) cls='wrongpick';
+          return `<div class="reviewopt ${cls}"><div class="optlet" style="width:22px;height:22px;font-size:12px;border-radius:50%;border:1.5px solid #9aa5b1;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${String.fromCharCode(65+i)}</div><div>${opt}${i===q.answer?' &#10003; Correct answer':''}${i===given && given!==q.answer?' &#10007; Your answer':''}</div></div>`;
+        }).join('') + `</div>`;
+      } else {
+        answerHtml = `<div class="gridinanswer">Your answer: <b>${answered? esc(given) : '(none)'}</b> &nbsp;|&nbsp; Correct answer: <b>${q.answer}</b></div>`;
+      }
+
+      html += `<div class="reviewq">
+        <div class="rhead">
+          <span class="tag">${mod.label} &middot; Question ${q.id}${flagged?' &middot; ⚑ Flagged':''}</span>
+          <span class="status ${statusClass}">${statusHtml}</span>
+        </div>
+        ${leftHtml}
+        <div class="prompt">${q.prompt}</div>
+        ${answerHtml}
+        <div class="explain-container ${isMath?'math':''}">
+          <span class="exlabel">Explanation</span>
+          ${q.explanation}
+        </div>
+      </div>`;
+    });
+  });
+  if(!html) html = `<p style="font-family:Arial,sans-serif;color:var(--sub);">No questions match this filter.</p>`;
+  return html;
+}
+
+/* ---------------- Loading / saving test data ---------------- */
+// Add an entry here for every test .json file you host alongside this HTML
+// file (same folder / same repo). "file" must match the filename exactly.
+const PRESETS = [
+  { label: "SAT Practice Test #4", file: "sat_practice_4.json" }
+];
+
+const presetSelect = document.getElementById('presetSelect');
+const fileInput = document.getElementById('fileInput');
+const loadMsg = document.getElementById('loadMsg');
+const currentTestLabel = document.getElementById('currentTestLabel');
+
+PRESETS.forEach(p=>{
+  const o = document.createElement('option');
+  o.value = p.file; o.textContent = p.label;
+  presetSelect.appendChild(o);
+});
+
+function validateSAT(data){
+  if(!data || !Array.isArray(data.modules) || data.modules.length===0){
+    return 'File must have a non-empty "modules" array.';
+  }
+  for(let mi=0; mi<data.modules.length; mi++){
+    const m = data.modules[mi];
+    if(!m.id || !m.label) return `Module ${mi+1} is missing an "id" or "label".`;
+    if(!Array.isArray(m.questions) || m.questions.length===0) return `Module ${mi+1} ("${m.label}") has no questions.`;
+    if(typeof m.timeMinutes !== 'number') return `Module ${mi+1} ("${m.label}") is missing a numeric "timeMinutes".`;
+    for(let qi=0; qi<m.questions.length; qi++){
+      const q = m.questions[qi];
+      if(q.id===undefined) return `Module ${mi+1}, question ${qi+1} is missing an "id".`;
+      if(!q.prompt) return `Module ${mi+1}, question "${q.id}" is missing a "prompt".`;
+      if(q.type==='mcq'){
+        if(!Array.isArray(q.options) || q.options.length<2 || typeof q.answer!=='number' || q.answer>=q.options.length){
+          return `Module ${mi+1}, question "${q.id}" (mcq) needs 2+ "options" and a valid numeric "answer".`;
+        }
+      } else if(q.type==='gridin'){
+        if(q.answer===undefined || q.answer===null || q.answer==='') return `Module ${mi+1}, question "${q.id}" (gridin) needs an "answer".`;
+      } else {
+        return `Module ${mi+1}, question "${q.id}" has unknown type "${q.type}" (expected "mcq" or "gridin").`;
+      }
+    }
+  }
+  return null;
+}
+
+function applyData(data, label){
+  SAT = data;
+  state = {
+    screen: 'welcome', studentName: '', moduleIndex: 0, qIndex: 0,
+    answers: {}, flags: {}, reviewFilter: 'all', timerSeconds: 0, timerHandle: null
+  };
+  currentTestLabel.textContent = label ? `Loaded: ${label}` : (data.title ? `Loaded: ${data.title}` : '');
+  render();
+}
+
+fileInput.addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt)=>{
+    try{
+      const data = JSON.parse(evt.target.result);
+      const err = validateSAT(data);
+      if(err){ loadMsg.textContent = err; loadMsg.className='load-msg err'; return; }
+      presetSelect.value = '';
+      applyData(data, file.name);
+      const totalQ = data.modules.reduce((s,m)=>s+m.questions.length,0);
+      loadMsg.textContent = `Loaded "${file.name}" (${totalQ} questions)`;
+      loadMsg.className = 'load-msg ok';
+    }catch(err){
+      loadMsg.textContent = "Couldn't read that file as valid JSON.";
+      loadMsg.className = 'load-msg err';
+    }
+  };
+  reader.readAsText(file);
+});
+
+presetSelect.addEventListener('change', (e)=>{
+  const file = e.target.value;
+  if(!file) return;
+  loadMsg.textContent = 'Loading…'; loadMsg.className = 'load-msg';
+  fetch(file).then(res=>{
+    if(!res.ok) throw new Error(`${file} not found (${res.status})`);
+    return res.json();
+  }).then(data=>{
+    const err = validateSAT(data);
+    if(err){ loadMsg.textContent = err; loadMsg.className='load-msg err'; return; }
+    fileInput.value = '';
+    const preset = PRESETS.find(p=>p.file===file);
+    applyData(data, preset ? preset.label : file);
+    const totalQ = data.modules.reduce((s,m)=>s+m.questions.length,0);
+    loadMsg.textContent = `Loaded "${preset?preset.label:file}" (${totalQ} questions)`;
+    loadMsg.className = 'load-msg ok';
+  }).catch(()=>{
+    loadMsg.textContent = `Couldn't load ${file} automatically (this happens when the page is opened directly from disk). Use "Load .json file" to upload it instead.`;
+    loadMsg.className = 'load-msg err';
+  });
+});
+
+/* ---------------- Save result ---------------- */
+function stripHtml(html){
+  return (html||'').toString()
+    .replace(/<br\s*\/?>/gi,'\n').replace(/<li>/gi,'\n- ').replace(/<[^>]+>/g,'')
+    .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+    .replace(/&mdash;/g,'—').replace(/&hellip;/g,'…')
+    .replace(/\n{3,}/g,'\n\n').trim();
+}
+function slugify(str){
+  return (str||'').toString().trim().replace(/[\\\/:*?"<>|]+/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,60);
+}
+function saveResult(){
+  let rwCorrect=0, rwTotal=0, mathCorrect=0, mathTotal=0;
+  const lines = [];
+  const now = new Date();
+  const displayName = state.studentName || 'Student';
+  lines.push(SAT.title || 'Practice Test');
+  lines.push(`Name: ${displayName}`);
+  lines.push(`Date: ${now.toLocaleString()}`);
+  lines.push('');
+
+  SAT.modules.forEach((mod, mIdx)=>{
+    mod.questions.forEach(q=>{
+      const ok = isCorrect(mIdx, q);
+      if(mod.subject==='math'){ mathTotal++; if(ok) mathCorrect++; } else { rwTotal++; if(ok) rwCorrect++; }
+    });
+  });
+  const totalCorrect = rwCorrect+mathCorrect, totalQ = rwTotal+mathTotal;
+  if(rwTotal) lines.push(`Reading & Writing: ${rwCorrect} / ${rwTotal}`);
+  if(mathTotal) lines.push(`Math: ${mathCorrect} / ${mathTotal}`);
+  lines.push(`Overall: ${totalCorrect} / ${totalQ} (${totalQ? Math.round(totalCorrect/totalQ*100):0}%)`);
+  lines.push('');
+  lines.push('='.repeat(60));
+  lines.push('');
+
+  SAT.modules.forEach((mod, mIdx)=>{
+    lines.push(`--- ${mod.label} ---`);
+    mod.questions.forEach(q=>{
+      const key = ansKey(mIdx, q.id);
+      const given = state.answers[key];
+      const answered = given!==undefined && given!=='';
+      const ok = answered && isCorrect(mIdx, q);
+      const flagged = state.flags[key] ? ' [flagged]' : '';
+      lines.push(`Question ${q.id}${flagged}: ${!answered?'Not answered':(ok?'Correct':'Incorrect')}`);
+      lines.push(`  Prompt: ${stripHtml(q.prompt)}`);
+      if(q.type==='mcq'){
+        q.options.forEach((opt,i)=>{
+          const tags=[];
+          if(i===q.answer) tags.push('CORRECT');
+          if(i===given && given!==q.answer) tags.push('your answer, incorrect');
+          else if(i===given) tags.push('your answer');
+          lines.push(`  ${String.fromCharCode(65+i)}. ${stripHtml(opt)}${tags.length?'  ['+tags.join(' — ')+']':''}`);
+        });
+      } else {
+        lines.push(`  Your answer: ${answered?given:'(not answered)'}`);
+        lines.push(`  Correct answer: ${q.answer}`);
+      }
+      lines.push(`  Explanation: ${stripHtml(q.explanation)}`);
+      lines.push('');
+    });
+  });
+
+  const blob = new Blob([lines.join('\n')], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stamp = now.toISOString().slice(0,19).replace(/[:T]/g,'-');
+  a.href = url;
+  a.download = `${slugify(displayName)||'Student'}-${slugify(SAT.title||'Practice-Test')}-${stamp}.txt`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const msgEl = document.getElementById('saveMsg');
+  if(msgEl) msgEl.textContent = `Saved as ${a.download}`;
+}
+
+render();
+
+// Try to auto-load the first hosted preset (works when this page is served
+// over http(s); silently does nothing if opened directly from disk or if
+// fetch isn't available in this context).
+if(PRESETS.length && typeof fetch === 'function'){
+  fetch(PRESETS[0].file).then(res=>{
+    if(!res.ok) throw new Error('not found');
+    return res.json();
+  }).then(data=>{
+    if(SAT) return; // a file was already loaded by the user in the meantime
+    const err = validateSAT(data);
+    if(err) return;
+    presetSelect.value = PRESETS[0].file;
+    applyData(data, PRESETS[0].label);
+    loadMsg.textContent = `Loaded "${PRESETS[0].label}"`;
+    loadMsg.className = 'load-msg ok';
+  }).catch(()=>{ /* not hosted / opened from disk — user must upload manually */ });
+}
+</script>
+</body>
+</html>
